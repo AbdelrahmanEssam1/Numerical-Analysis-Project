@@ -1,2 +1,2 @@
 pkg load symbolic
-newton_raphson_gui_updated();
+newton_raphson_gui_updated;
