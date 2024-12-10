@@ -76,6 +76,12 @@ function run_newton_raphson(eqnInput, gInput, mInput, cInput, jInput, guessInput
 
   max_iter = str2double(get(maxIterInput, 'String'));
 
+  % Check if C is zero and show an error if it is
+  if C == 0
+      msgbox('C cannot be zero. Division by zero is not allowed.', 'Exception', 'error');
+      return;
+  end
+
   % Replace constants in the equation
   eqn_str = strrep(eqn_str, 'G', char(G));
 
