@@ -139,37 +139,34 @@ function run_newton_raphson(eqnInput, gInput, mInput, cInput, jInput, guessInput
   end
 
   % Plotting
-  figure('Name', 'Newton-Raphson Results');
+figure('Name', 'Newton-Raphson Results', 'NumberTitle', 'off', 'Color', 'w'); % White background for better contrast
 
-  subplot(3, 1, 1);
+% Root vs Iterations
+subplot(3, 1, 1);
+plot(1:iter, r_values, '-o', 'Color', [0.2, 0.6, 0.8], 'LineWidth', 2, 'MarkerFaceColor', [0.1, 0.4, 0.6]); % Teal blue
+title('Root vs Iterations', 'FontWeight', 'bold');
+xlabel('Iteration', 'FontWeight', 'bold');
+ylabel('Root', 'FontWeight', 'bold');
+grid on;
 
-  plot(1:iter, r_values, '-o');
+% Convergence Plot |f(r)|
+subplot(3, 1, 2);
+semilogy(1:iter, abs(double(subs(f, r, r_values))), '-o', ...
+    'Color', [0.5, 0.2, 0.7], 'LineWidth', 2, 'MarkerFaceColor', [0.4, 0.1, 0.6]); % Deep Purple
+title('Newton-Raphson Convergence', 'FontWeight', 'bold');
+xlabel('Iteration', 'FontWeight', 'bold');
+ylabel('|f(r)|', 'FontWeight', 'bold');
+grid on;
 
-  title('Root vs Iterations');
 
-  xlabel('Iteration');
+% Error % vs Iterations
+subplot(3, 1, 3);
+plot(1:iter, errors, '-o', 'Color', [0.2, 0.8, 0.4], 'LineWidth', 2, 'MarkerFaceColor', [0.1, 0.6, 0.3]); % Soft green
+title('Error % vs Iterations', 'FontWeight', 'bold');
+xlabel('Iteration', 'FontWeight', 'bold');
+ylabel('Error %', 'FontWeight', 'bold');
+grid on;
 
-  ylabel('Root');
-
-  subplot(3, 1, 2);
-
-  semilogy(1:iter, abs(double(subs(f, r, r_values))), '-o'); % Corrected convergence plot
-
-  title('Newton-Raphson Convergence');
-
-  xlabel('Iteration');
-
-  ylabel('|f(r)|');
-
-  subplot(3, 1, 3);
-
-  plot(1:iter, errors, '-o');
-
-  title('Error % vs Iterations');
-
-  xlabel('Iteration');
-
-  ylabel('Error %');
 end
 
 
