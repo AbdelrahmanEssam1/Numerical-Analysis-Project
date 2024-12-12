@@ -1,70 +1,123 @@
-function newton_raphson_gui_updated
- % Main function to run the Newton-Raphson GUI
-  fig = figure('Name', 'Newton-Raphson Method', 'NumberTitle', 'off', ...
-               'Position', [200, 200, 600, 400], 'Color', [0.9, 0.9, 0.9]);
+function newton_raphson_gui
+    % Main function to run the Newton-Raphson GUI
+    fig = figure('Name', 'Newton-Raphson Method', 'NumberTitle', 'off', ...
+                 'Position', [200, 200, 600, 450], 'Color', [0.9, 0.9, 0.9]);
 
-  % Equation input at the top center
-  uicontrol('Style', 'text', 'Position', [100, 350, 120, 30], ...
-            'String', 'Equation f(r):', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  eqnInput = uicontrol(fig, 'Style', 'edit', 'Position', [230, 350, 250, 30]);
+    % Welcome header with adjusted spacing and color
+    uicontrol(fig, 'Style', 'text', 'Position', [100, 380, 400, 40], ...
+              'String', 'Welcome', 'FontSize', 14, ...
+              'FontWeight', 'bold', 'ForegroundColor', 'black', ...
+              'BackgroundColor', [0.9, 0.9, 0.9], 'HorizontalAlignment', 'center');
 
-  % First row: G and M inputs
-  uicontrol(fig, 'Style', 'text', 'Position', [50, 300, 100, 30], ...
-            'String', 'G:(m^3/kg/s^2):', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  gInput = uicontrol(fig, 'Style', 'edit', 'Position', [160, 300, 100, 30], 'String', '6.67430e-11');
+    % Adjusted input section to leave more space after the Welcome header
+    % Equation input
+    uicontrol('Style', 'text', 'Position', [100, 320, 120, 30], ...
+              'String', 'Equation f(r):', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    eqnInput = uicontrol(fig, 'Style', 'edit', 'Position', [230, 320, 250, 30]);
 
-  uicontrol(fig, 'Style', 'text', 'Position', [320, 300, 100, 30], ...
-            'String', 'M:(kg)', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  mInput = uicontrol(fig, 'Style', 'edit', 'Position', [430, 300, 100, 30], 'String', '1.989e30');
+    % First row: G and M inputs
+    uicontrol(fig, 'Style', 'text', 'Position', [50, 280, 100, 30], ...
+              'String', 'G:(m^3/kg/s^2):', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    gInput = uicontrol(fig, 'Style', 'edit', 'Position', [160, 280, 100, 30], 'String', '6.67430e-11');
 
-  % Second row: C and J inputs
-  uicontrol(fig, 'Style', 'text', 'Position', [50, 260, 100, 30], ...
-            'String', 'C:(m/s)', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  cInput = uicontrol(fig, 'Style', 'edit', 'Position', [160, 260, 100, 30], 'String', '3e8');
+    uicontrol(fig, 'Style', 'text', 'Position', [320, 280, 100, 30], ...
+              'String', 'M:(kg)', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    mInput = uicontrol(fig, 'Style', 'edit', 'Position', [430, 280, 100, 30], 'String', '1.989e30');
 
-  uicontrol(fig, 'Style', 'text', 'Position', [320, 260, 100, 30], ...
-            'String', 'J:(kg·m^2 or J)', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  jInput = uicontrol(fig, 'Style', 'edit', 'Position', [430, 260, 100, 30], 'String', '1e43');
+    % Second row: C and J inputs
+    uicontrol(fig, 'Style', 'text', 'Position', [50, 240, 100, 30], ...
+              'String', 'C:(m/s)', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    cInput = uicontrol(fig, 'Style', 'edit', 'Position', [160, 240, 100, 30], 'String', '3e8');
 
-  % Third row: Initial Guess and Tolerance
-  uicontrol(fig, 'Style', 'text', 'Position', [50, 220, 100, 30], ...
-            'String', 'Initial Guess:', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  guessInput = uicontrol(fig, 'Style', 'edit', 'Position', [160, 220, 100, 30], 'String', '1');
+    uicontrol(fig, 'Style', 'text', 'Position', [320, 240, 100, 30], ...
+              'String', 'J:(kg·m^2 or J)', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    jInput = uicontrol(fig, 'Style', 'edit', 'Position', [430, 240, 100, 30], 'String', '1e43');
 
-  uicontrol(fig, 'Style', 'text', 'Position', [320, 220, 100, 30], ...
-            'String', 'Tolerance:', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  tolInput = uicontrol(fig, 'Style', 'edit', 'Position', [430, 220, 100, 30], 'String', '1e-6');
+    % Third row: Initial Guess and Tolerance
+    uicontrol(fig, 'Style', 'text', 'Position', [50, 200, 100, 30], ...
+              'String', 'Initial Guess:', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    guessInput = uicontrol(fig, 'Style', 'edit', 'Position', [160, 200, 100, 30], 'String', '1');
 
-  % Fourth row: Max Iterations
-  uicontrol(fig, 'Style', 'text', 'Position', [50, 180, 150, 30], ...
-            'String', 'Max Iterations:', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
-            'BackgroundColor', [0.8, 0.8, 0.8]);
-  maxIterInput = uicontrol(fig, 'Style', 'edit', 'Position', [210, 180, 100, 30], 'String', '100');
+    uicontrol(fig, 'Style', 'text', 'Position', [320, 200, 100, 30], ...
+              'String', 'Tolerance:', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    tolInput = uicontrol(fig, 'Style', 'edit', 'Position', [430, 200, 100, 30], 'String', '1e-6');
 
-  % Run button centered at the bottom
-  uicontrol(fig, 'Style', 'pushbutton', 'Position', [250, 100, 100, 40], ...
-            'String', 'Run', 'FontSize', 12, ...
-            'BackgroundColor', [0.7, 0.7, 0.7], ...
-            'Callback', @(~, ~) run_newton_raphson(eqnInput, gInput, mInput, cInput, jInput, guessInput, tolInput, maxIterInput));
+    % Fourth row: Max Iterations
+    uicontrol(fig, 'Style', 'text', 'Position', [50, 160, 150, 30], ...
+              'String', 'Max Iterations:', 'FontSize', 10, 'HorizontalAlignment', 'center', ...
+              'BackgroundColor', [0.8, 0.8, 0.8]);
+    maxIterInput = uicontrol(fig, 'Style', 'edit', 'Position', [210, 160, 100, 30], 'String', '100');
+
+    % Run button centered at the bottom
+    uicontrol(fig, 'Style', 'pushbutton', 'Position', [250, 80, 100, 40], ...
+              'String', 'Run', 'FontSize', 12, ...
+              'BackgroundColor', [0.7, 0.7, 0.7], ...
+              'Callback', @(~, ~) run_newton_raphson(eqnInput, gInput, mInput, cInput, jInput, guessInput, tolInput, maxIterInput));
 end
+
+
 
 function run_newton_raphson(eqnInput, gInput, mInput, cInput, jInput, guessInput, tolInput, maxIterInput)
   % Extract user inputs
   eqn_str = get(eqnInput, 'String');
-  G = vpa(get(gInput, 'String'));
-  M = vpa(get(mInput, 'String'));
-  C = vpa(get(cInput, 'String'));
-  J = vpa(get(jInput, 'String'));
-  r0 = str2double(get(guessInput, 'String'));
-  tol = str2double(get(tolInput, 'String'));
-  max_iter = str2double(get(maxIterInput, 'String'));
+  G_str = get(gInput, 'String');
+  M_str = get(mInput, 'String');
+  C_str = get(cInput, 'String');
+  J_str = get(jInput, 'String');
+  r0_str = get(guessInput, 'String');
+  tol_str = get(tolInput, 'String');
+  max_iter_str = get(maxIterInput, 'String');
+
+  % Validate inputs
+  if isempty(eqn_str)
+      msgbox('Please enter a function before running the calculation.', 'Input Required', 'error');
+      return;
+  end
+  if isempty(G_str) || isnan(str2double(G_str))
+      msgbox('Please enter a valid numeric value for G.', 'Input Required', 'error');
+      return;
+  end
+  if isempty(M_str) || isnan(str2double(M_str))
+      msgbox('Please enter a valid numeric value for M.', 'Input Required', 'error');
+      return;
+  end
+  if isempty(C_str) || isnan(str2double(C_str))
+      msgbox('Please enter a valid numeric value for C.', 'Input Required', 'error');
+      return;
+  end
+  if isempty(J_str) || isnan(str2double(J_str))
+      msgbox('Please enter a valid numeric value for J.', 'Input Required', 'error');
+      return;
+  end
+  if isempty(r0_str) || isnan(str2double(r0_str))
+      msgbox('Please enter a valid numeric value for the Initial Guess.', 'Input Required', 'error');
+      return;
+  end
+  if isempty(tol_str) || isnan(str2double(tol_str))
+      msgbox('Please enter a valid numeric value for Tolerance.', 'Input Required', 'error');
+      return;
+  end
+  if isempty(max_iter_str) || isnan(str2double(max_iter_str))
+      msgbox('Please enter a valid numeric value for Max Iterations.', 'Input Required', 'error');
+      return;
+  end
+
+  % Convert validated inputs
+  G = vpa(G_str);
+  M = vpa(M_str);
+  C = vpa(C_str);
+  J = vpa(J_str);
+  r0 = str2double(r0_str);
+  tol = str2double(tol_str);
+  max_iter = str2double(max_iter_str);
+
   % Check if C is zero and show an error if it is
   if C == 0
       msgbox('C cannot be zero. Division by zero is not allowed.', 'Exception', 'error');
